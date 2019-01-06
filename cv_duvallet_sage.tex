@@ -1,0 +1,561 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Simple LaTeX CV Template %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTE: If you find that it says                                     %%
+%%                                                                    %%
+%%                           1 of ??                                  %%
+%%                                                                    %%
+%% at the bottom of your first page, this means that the AUX file     %%
+%% was not available when you ran LaTeX on this source. Simply RERUN  %%
+%% LaTeX to get the ``??'' replaced with the number of the last page  %%
+%% of the document. The AUX file will be generated on the first run   %%
+%% of LaTeX and used on the second run to fill in all of the          %%
+%% references.                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[10pt]{article}
+
+% The automated optical recognition software used to digitize resume
+% information works best with fonts that do not have serifs. This
+% command uses a sans serif font throughout. Uncomment both lines (or at
+% least the second) to restore a Roman font (i.e., a font with serifs).
+%\usepackage{times}
+%\renewcommand{\familydefault}{\sfdefault}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+\usepackage{comment}
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em} %1em}
+\newlength{\bibsep}
+ {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}%
+        {\begin{enumerate}{}{%
+%        {\begin{list}{}{%
+       \setlength{\leftmargin}{\bibhang}%
+       \setlength{\itemindent}{-\leftmargin}%
+       \setlength{\itemsep}{\bibsep}%
+       \setlength{\parsep}{\z@}%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{enumerate}\vspace{-.6\baselineskip}}
+%        {\end{list}\vspace{-.6\baselineskip}}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+\usepackage[paper=letterpaper,
+            %includefoot, % Uncomment to put page number above margin
+            marginparwidth=1.2in,     % Length of section titles
+            marginparsep=.05in,       % Space between titles and text
+            margin=1in,               % 1 inch margins
+            includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+%\usepackage[paper=a4paper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=30.5mm,    % Length of section titles
+%            marginparsep=1.5mm,       % Space between titles and text
+%            margin=25mm,              % 25mm margins
+%            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+\usepackage[shortlabels]{enumitem}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+       \parbox{4in}{\, \hfill %
+                    \arabic{page} of \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+                    \hfill \,}}
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+% (optional argument typesets an object right-justified across from name
+%  as well)
+%
+% Usage: \makeheading{name}
+%        OR
+%        \makeheading[right_object]{name}
+%
+% Place at top of document. It should be the first thing.
+% If ``right_object'' is provided in the square-braced optional
+% argument, it will be right justified on the same line as ``name'' at
+% the top of the CV. For example:
+%
+%       \makeheading[\emph{Curriculum vitae}]{Your Name}
+%
+% will put an emphasized ``Curriculum vitae'' at the top of the document
+% as a title. Likewise, a picture could be included:
+%
+%   \makeheading[\includegraphics[height=1.5in]{my_picutre}]{Your Name}
+%
+% the picture will be flush right across from the name.
+\newcommand{\makeheading}[2][]%
+        {\hspace*{-\marginparsep minus \marginparwidth}%
+         \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}%
+             {\large \bfseries #2 \hfill #1}\\[-0.15\baselineskip]%
+                 \rule{\columnwidth}{1pt}%
+         \end{minipage}}
+
+% The section headings
+%
+% Usage: \section{section name}
+\renewcommand{\section}[1]{\pagebreak[3]%
+    \hyphenpenalty=10000%
+    \vspace{1.3\baselineskip}%
+    \phantomsection\addcontentsline{toc}{section}{#1}%
+    \noindent\llap{\scshape\smash{\parbox[t]{\marginparwidth}{\raggedright #1}}}%
+    \vspace{-\baselineskip}\par}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*]}{\end{itemize}%
+         \vspace{-.6\baselineskip}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+        {\begin{list}{#1}{%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}}
+
+% An environment IDENTICAL to innerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{loneinnerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}\vspace{-.6\baselineskip}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[3]}
+\newcommand{\halfblankline}{\quad\vspace{-0.5\baselineskip}\pagebreak[3]}
+
+% Uses hyperref to link DOI
+\newcommand\doilink[1]{\href{http://dx.doi.org/#1}{#1}}
+\newcommand\doi[1]{doi:\doilink{#1}}
+
+% For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+\providecommand*\url[1]{\href{#1}{#1}}
+% Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+\renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+% For \email{ADDRESS}, links ADDRESS to the url mailto:ADDRESS
+\providecommand*\email[1]{\href{mailto:#1}{#1}}
+% Same as above, but pretty-prints ADDRESS in teletype fixed-width font
+%\renewcommand*\email[1]{\href{mailto:#1}{\texttt{#1}}}
+
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    \TeX}}
+\providecommand\BibTeX{{B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    \TeX}}
+\providecommand\Matlab{\textsc{Matlab}}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\makeheading{Claire Duvallet}
+
+\section{Contact}
+
+% NOTE: Mind where the & separators and \\ breaks are in the following
+%       table.
+%
+% ALSO: \rcollength is the width of the right column of the table
+%       (adjust it to your liking; default is 1.85in).
+%
+\newlength{\rcollength}\setlength{\rcollength}{1.4in}%
+
+%\begin{tabular}[t]{@{}p{\textwidth-\rcollength}p{\rcollength}}
+\begin{tabular}[t]{@{}p{\textwidth-\rcollength}p{\rcollength}}
+
+\email{duvallet@mit.edu} & 9 Seattle St \\
+cduvallet.github.io & Allston, MA 02134 \\
+
+%9 Seattle St   & 512-636-9548 & cduvallet.github.io \\
+%Allston, MA  02134     & \email{duvallet@mit.edu} & \\
+\end{tabular}
+
+%\section{Objective}
+
+%Insert text here if you want to
+%\begin{innerlist}
+%\item More information and auxiliary documents can be found at\\\url{http://www.tedpavlic.com/facjobsearch/}
+%\end{innerlist}
+
+%\section{Research Interests}
+
+%systems biology, evolution, ecology, population genetics, -omics technologies, information theory, nonlinear dynamics, stochastic processes, probability theory, data mining, statistical learning, bayesian inference
+
+\section{Education}
+
+\textbf{Massachusetts Institute of Technology}, \textit{Cambridge, MA} \hfill {2014 -- 2019}
+\begin{outerlist}
+\item[] Ph.D., Biological Engineering \\
+\textit{GPA}: 5.0/5.0
+\end{outerlist}
+\vspace{.1in}
+
+\textbf{Columbia University}, \textit{New York, NY} \hfill {2009 -- 2013}
+\begin{outerlist}
+\item[] B.S., Biomedical Engineering, \textit{cell and tissue engineering track} \\
+\textit{GPA}: 4.1/4.0, \textit{Summa cum laude}
+\end{outerlist}
+
+\section{Research}
+
+\textbf{Massachusetts Institute of Technology} \hfill {2015 -- present}\\
+Department of Biological Engineering \\
+Supervisor: Eric J. Alm, Ph.D. \\
+	
+I study the relationship between the microbiome and health and disease, and am generally interested in personalized medicine approaches for public health applications. \\
+
+\begin{innerlist}
+\item{Performed a meta-analysis of 28 case-control gut microbiome studies across 10 disease states}
+\item{Characterized the lung, gastric, and oropharyngeal microbiomes of pediatric patients with impaired swallow function}
+\item{Proposed a framework for donor selection in fecal microbiota transplant clinical trials}
+\item{Mining untargeted metabolomics data from residential sewage to identify human-derived biomarkers}
+\item{Developing methods to process and analyze untargeted metabolomics of blood for precision diagnostics and outcome prediction}
+\end{innerlist}
+
+\vspace{.15in}
+\textbf{Columbia University} \hfill {2011 -- 2013} \\
+Molecular and Microscale Bioengineering Laboratory \\
+Supervisor: Samuel L. Sia, Ph.D. 
+	\vspace{0.1in}
+
+As an undergraduate research assistant, I worked on developing a point-of-care microfluidic device to diagnose multi-drug resistant tuberculosis. \\
+
+\begin{innerlist}
+\item{Designed and developed the DNA amplification and detection modules of point-of-care diagnostic}
+\item{Optimized primers, detection probes, reagents, and reaction conditions for multiplex, fast, and isothermal PCR reactions}
+\end{innerlist}
+
+\vspace{.15in}
+\textbf{Ecole Polytechnique} \hfill {Summer 2012}\\
+Laboratoire de Biochimie\\
+Supervisor: Cedric Norais, Ph.D.
+	\vspace{0.1in}
+
+As an international undergraduate research intern, I studied the acquired-immunity CRISPR system in E. coli. \\
+
+\begin{innerlist}
+\item{Constructed plasmids to study components of the CRISPR system in \textit{E. coli} and expressed and purified CasBCD*E protein complex}
+\end{innerlist}
+
+\section{Publications}
+\vspace{-.1275in}
+\begin{bibsection}
+	\item \textbf{Claire Duvallet}, Caroline Zellmer, Pratik Panchal, Shrish Budree, Madji Osman, and Eric Alm. (2018) \\ 
+		``Framework for rational donor selection in fecal microbiota transplant clinical trials.'' \\ 
+		\textit{in preparation}.
+	\item Mariana Matus, \textbf{Claire Duvallet}, Newsha Ghaeli, Melissa Soule, Krista Longnecker, Ilana Brito, Carlo Ratti, Elizabeth B. Kujawinski, Eric Alm. (2018) \\ 
+		``Untargeted detection of human health and activity markers in residential wastewater through microbiome sequencing and metabolomics.'' \\ 
+		\textit{in preparation}.
+	\item \textbf{Claire Duvallet}, Kara Larson, Scott Snapper, Sonia Iosim, Ann Lee, Katherine Freer, Kara May, Eric J. Alm, and Rachel Rosen. (2018) \\ 
+		``Aerodigestive sampling reveals altered microbial exchange between lung, oropharyngeal, and gastric microbiomes in children with impaired swallow function.'' \\ 
+		\emph{PLoS ONE}, \textit{submitted}.
+	\item Sean M. Gibbons, \textbf{Claire Duvallet}, and Eric J. Alm. (2018) \\ 
+		``Correcting for batch effects in case-control microbiome studies.'' \\ 
+		\emph{PLoS Computational Biology}. doi: 10.1371/journal.pone.0176335.
+	\item \textbf{Claire Duvallet}. (2018) \\ 
+		``Meta-analysis generates and prioritizes hypotheses for translational microbiome research.'' \\ 
+		\emph{Microbial Biotechnology}. doi: 10.1111/1751-7915.13047.
+	\item \textbf{Claire Duvallet}, Sean M. Gibbons, Thomas Gurry, Rafael A. Irizarry, and Eric J. Alm. (2017) \\ 
+		``Meta-analysis of gut microbiome studies identifies disease-specific and shared responses.'' \\ 
+		\emph{Nature Communications}. doi: 10.1038/s41467-017-01973-8.
+	\item Scott W. Olesen, \textbf{Claire Duvallet}, and Eric J. Alm. (2017) \\ 
+		``dbOTU3: A new implementation of distribution-based OTU calling.'' \\ 
+		\emph{PloS ONE}. doi: 10.1371/journal.pone.0176335.
+	\item \textit{[Non-peer reviewed blog post]} \textbf{Claire Duvallet}. (2017) \\ 
+		``Beyond dysbiosis: disease-specific and shared microbiome responses to disease.'' 
+		\emph{Nature Microbiology Community Forum}.
+	\item \textit{[Dataset]} \textbf{Claire Duvallet}, Sean M. Gibbons, Thomas Gurry, Rafael A. Irizarry, and Eric J. Alm. (2017) \\ 
+		``MicrobiomeHD: the human gut microbiome in health and disease.'' \\ 
+		\emph{Zenodo}. doi: 10.5281/zenodo.797943
+\end{bibsection}
+
+\section{Presentations}
+%\vspace{-.1in}
+\textbf{Oral presentations}
+\begin{bibsection}
+\item ``Framework for rational donor selection in fecal microbiota transplant clinical trials.'' International Conference on Microbiome Engineering (ICME 2018). Boston, MA. Nov. 2018. \textit{Invited}.
+\item ``Predictive power of the microbiome.'' Science on Tap! Boston College Department of Biology seminar series. Boston, MA. Aug. 2018. \textit{Invited}.
+\item ``Distribution-based methods to increase power and reduce redundancy in microbiome data.'' Teaching and Developing QIIME 2 Workshop. San Diego, CA. May 2018. \textit{Selected}.
+\item ``Meta-analysis to identify consistent disease-associated microbiome shifts.'' MIT-Harvard Microbiome Symposium. Cambridge, MA. March 2018. \textit{Selected}.
+\item ``Meta-analysis to identify consistent disease-associated microbiome shifts.'' MIT Department of Biological Engineering Retreat. Cambridge, MA. October 2017. \textit{Invited}.
+\end{bibsection}
+\vspace{0.15in}
+
+\textbf{Poster presentations}
+\begin{bibsection}
+\item ``Meta-analysis of gut microbiome studies identifies disease-specific and shared responses.'' \textit{Women in Data Science Cambridge}, March 2018 and \textit{Pacific Symposium on Biocomputing}, January 2018
+\item ``Empirical signatures of compositional stability in the gut microbiome.'' \textit{Statistical and Algorithmic Challenges in Microbiome Data Analysis Workshop}, MIT Center for Informatics and Therapeutics and The Simons Center for Data Analysis, February 2016.
+\end{bibsection} 
+
+\section{Software}
+
+\textbf{Percentile normalization} \\
+Correcting batch effects in case-control microbiome studies. (Gibbons \textit{et al.}, 2018). \\
+\begin{innerlist}
+	\item[] Python implementation: github.com/seangibbons/percentile\_normalization \textit{(contributor)}
+	\item[] QIIME 2 plugin: github.com/cduvallet/q2-perc-norm \textit{(developer)}
+\end{innerlist}
+\vspace{.15in}
+
+\textbf{Distribution-based OTU calling} \\
+New implementation of Preheim \textit{et al}.'s distribution-based OTU clustering algorithm. (Preheim \textit{et al.}, 2013; Olesen \textit{et al.}, 2017). \\
+\begin{innerlist}
+	\item [] Python implementation: github.com/swo/dbotu3 \textit{(contributor)}
+    \item [] QIIME 2 plugin: github.com/cduvallet/q2-dbotu \textit{(developer)}
+\end{innerlist}
+\vspace{.15in}
+
+\textbf{Amplicon sequencing pipeline} \\
+End-to-end pipeline to process 16S data. \\
+\begin{innerlist}
+	\item [] Python: github.com/thomasgurry/amplicon\_sequencing\_pipeline \textit{(co-developer)}
+\end{innerlist}
+\vspace{.15in}
+
+% Add a little space to nudge next ``Conference Publications'' marginpar
+% down to make room for tall ``Submitted Journal Publications''
+% marginpar. If there are enough submitted journal publications, this
+% space will not be needed (and should be removed).
+%\vspace{0.1in}
+
+\section{Fellowships \& Awards}
+
+\textbf{Fellowships}
+\begin{outerlist}
+	\item[] Siebel Scholars Foundation \hfill {2018} \\
+		\textit{Siebel Scholar Class of 2019}
+	\item[] National Defense Science and Engineering Graduate Fellowship \hfill {2015 -- 2018} \\
+		\textit{NDSEG Recipient}
+	\item[] National Science Foundation Graduate Research Fellowship \hfill {2015} \\ 
+		\textit{Honorable Mention} 
+	\item[] Henry Luce Foundation \hfill {2013 -- 2014} \\ 
+		\textit{Luce Scholar} 
+\end{outerlist}
+\vspace{.15in}
+
+\textbf{Awards}
+\begin{outerlist}
+	\item[] MIT Graduate Women of Excellence \hfill {2017}
+	\item[] Salutatorian \hfill {2013} \\
+		\textit{Columbia University Fu Foundation School of Engineering and Applied Science}
+	\item[] Richard Skalak Award in Biomedical Engineering \hfill {2013} \\
+		\textit{Columbia University Department of Biomedical Engineering}
+	\item[] Robert E. and Claire S. Reiss Prize in Biomedical Engineering \hfill {2013} \\
+		\textit{Columbia University Department of Biomedical Engineering} 
+	\item[] King's Crown Bronze Leadership Award \hfill {2012} \\
+		\textit{Columbia University}
+	\item[] Tau Beta Pi, The Engineering Honor Society \hfill {2012}
+	\item[] Valedictorian\hfill {2009} \\
+		\textit{James Bowie High School}, ranked first out of 636 students
+\end{outerlist}
+\vspace{.15in}
+
+
+\section{Teaching Experience}
+
+\textbf{Teaching Assistant} \hfill {Fall 2015} \\
+20.106 Systems Microbiology, \textit{Massachusetts Institute of Technology} \\
+
+I was a TA for seven advanced undergraduate students in a new course on the human microbiome, emerging disease, phylogenetics, and host-microbe interactions. \\
+
+\begin{innerlist}
+\item{Developed problem sets and guided lecture content for a module on processing and analyzing 16S data}
+\item{Facilitated and participated in paper discussions on various topics in zoonotic disease, viral communities, host immune responses, and the human microbiome}
+\item{Mentored students on project re-processing and re-analyzing published microbiome datasets with machine learning tools}
+\end{innerlist}
+
+\vspace{.15in}
+\textbf{Lecturer} \hfill {2013 -- 2014} \\
+Biomedical Equipment Technology Department, \textit{University of Puthisastra} \\
+Engineering World Health, \textit{Phnom Penh, Cambodia} \\
+
+As a Luce Scholar, I was one of the first lecturers for Engineering World Health's new Associate Bachelor’s program in Biomedical Equipment Technology at the University of Puthisastra. \\
+
+\begin{innerlist}
+\item{Developed curricula and syllabi for anatomy and physiology, troubleshooting skills, and math modules}
+\item{Prepared and delivered lectures, exams, assignments, in-class activities, and demos for two classes of 12-18 Cambodian students and technicians (in English, with a translator)}
+\item{Managed Cambodian student-teaching staff during main supervisor's absence and supported foreign and local teaching staff}
+\end{innerlist}
+
+\vspace{.15in}
+\textbf{Teaching Assistant} \hfill {2012 -- 2013} \\
+The Art of Engineering, \textit{Columbia University} \\
+
+My senior year at Columbia, I TAed the biomedical engineering section of the introductory engineering course for freshmen. \\
+
+\begin{innerlist}
+\item{Assisted students in designing and building a vital-signs monitoring device, guiding them through the engineering design process}
+\item{Taught concepts in MATLAB and circuitry required for projects}
+\end{innerlist}
+\vspace{.15in}
+
+\section{Leadership \& Service}
+
+\textbf{Academic and professional}
+\begin{outerlist}
+	\item[] MIT Biotech Group \hfill {2017 -- 2018} \\ \textit{Beyond the Bench Initiative board member} 
+	\item[] MIT Microbiome Club \hfill {2015 -- 2018} \\ \textit{Co-Founder, President, Executive board member}
+	\item[] MIT-Harvard Microbiome Symposium \hfill {2016 and 2017} \\ \textit{Co-Founder and organizing committee} 
+\end{outerlist}
+\vspace{.15in}
+
+\textbf{Departmental and MIT}
+\begin{outerlist}
+	\item[] Biological Engineering Department Visiting Committee \hfill {2018} \\
+	\textit{Graduate student representative}
+	\item[] Graduate Student Advisory Group for Engineering (GradSAGE) \hfill {2017 -- present} \\
+	Advisory group to the Dean of the School of Engineering \\
+	\textit{Advisor/Advisee Relations Sub-Committee}
+	\item[] MIT Graduate Student Council \hfill {2017 -- present} \\
+		Diversity and Inclusion Subcommittee  \\
+		\textit{Vice Chair, Department and Classroom Inclusion co-coordinator} 
+	\item[] BE Resources for Easing Friction and Stress (BE REFS) \hfill {2016 -- present} \\
+	\textit{Confidential conflict management coach and graduate student advocate}
+	\item[] BE Graduate Student Board \hfill {2015 -- 2018} \\ 
+		\textit{Diversity Chair} 
+		\begin{innerlist}
+			\item[] \textit{Co-Founder}, BE Application Assistance Program 
+			\item[] \textit{Lead author}, BE Departmental Values Statement 
+			\item[] \textit{Co-Lead}, 2016 BE Diversity Survey
+		\end{innerlist}
+\end{outerlist}
+\vspace{.15in}
+
+\textbf{Outreach \& Mentorship}
+\begin{outerlist}
+	\item[] MIT Microbiome superUROP \hfill {2016 -- 2017} \\
+	\textit{Mentor, supervised one undergraduate researcher}
+	\item[] Science Club for Girls, Young Leaders in STEM \hfill {2016 and 2017} \\ \textit{Volunteer, developed and taught three-day course on} \\ \textit{microbiology and the human microbiome} 
+	\item[] MIT SPLASH \hfill 2015 \\
+	\textit{Volunteer, ``Microbiome 101: What's in your poop?''}
+	\item[] E3: Empowering, Encouraging, and Eliminating Barriers for \\ Women in STEM \hfill 2015 \\
+	\textit{Mentor (2015), guest presenter (2016)}
+	\item[] ESL Program for MIT Service Employees \hfill {2015 -- 2018} \\
+	\textit{Math GED tutor}
+\end{outerlist}
+\vspace{.15in}
+
+\textbf{Reviewer}
+\begin{outerlist}
+	\item[] MIT Summer Research Program (MSRP) Reviewer \hfill {2018} 
+	\item[] MIT Committed to Caring Selection Committee \hfill {2017} 
+	\item[] MIT IDEAS Global Challenge Reviewer \hfill {2015 -- present} 
+	\end{outerlist}
+\vspace{.15in}
+
+%\section{Extra-curriculars}
+%
+%\begin{outerlist}
+%\item[] {MIT Interfaith Dialogue Program} \hfill {2017 -- 2018} \\
+%\textit{Addir fellow}
+%\item[] {sMITe, MIT Women's Ultimate Frisbee Team} \hfill {2014 -- present} \\
+%\textit{B-team captain (2014 -- 2015)}
+%\end{outerlist}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------%
+% The following is copyright and licensing information for
+% redistribution of this LaTeX source code; it also includes a liability
+% statement. If this source code is not being redistributed to others,
+% it may be omitted. It has no effect on the function of the above code.
+%----------------------------------------------------------------------%
+% Copyright (c) 2007, 2008, 2009, 2010, 2011 by Theodore P. Pavlic
+%
+% Unless otherwise expressly stated, this work is licensed under the
+% Creative Commons Attribution-Noncommercial 3.0 United States License. To
+% view a copy of this license, visit
+% http://creativecommons.org/licenses/by-nc/3.0/us/ or send a letter to
+% Creative Commons, 171 Second Street, Suite 300, San Francisco,
+% California, 94105, USA.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+% OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+% MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+% IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+% CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+% TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+% SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+%----------------------------------------------------------------------%
